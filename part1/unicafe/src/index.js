@@ -7,9 +7,10 @@ const Button = ({ text, handleClick }) => (
 
 const StatisticLine = ({ text, value, isPercentage = false }) => {
   return (
-    <>
-      {text}: {isPercentage ? value + "%" : value} <br />
-    </>
+    <tr>
+      <td>{text}:</td>
+      <td>{isPercentage ? value + "%" : value}</td>
+    </tr>
   );
 };
 
@@ -27,20 +28,26 @@ const Buttons = (props) => {
 
 const Statistics = (props) => {
   const { good, neutral, bad } = props.states;
-  const all = good[0] - 1 * bad[0] - neutral[0];
+  const all = good[0] - 1 * bad[0] + neutral[0];
+  const average = (good[0] + bad[0]) / all;
+  const percentagePositive = (good[0] / all) * 100;
 
   return (
     <div>
-      <StatisticLine text="Good" value={good[0]} />
-      <StatisticLine text="Neutral" value={neutral[0]} />
-      <StatisticLine text="Bad" value={-1 * bad[0]} />
-      <StatisticLine text="All" value={all} />
-      <StatisticLine text="Average" value={(good[0] + bad[0]) / all} />
-      <StatisticLine
-        text="Positive"
-        value={(good[0] / all) * 100}
-        isPercentage={true}
-      />
+      <table>
+        <tbody>
+          <StatisticLine text="Good" value={good[0]} />
+          <StatisticLine text="Neutral" value={neutral[0]} />
+          <StatisticLine text="Bad" value={-1 * bad[0]} />
+          <StatisticLine text="All" value={all} />
+          <StatisticLine text="Average" value={average ? average : 0} />
+          <StatisticLine
+            text="Positive"
+            value={percentagePositive ? percentagePositive : 0}
+            isPercentage={true}
+          />
+        </tbody>
+      </table>
     </div>
   );
 };
@@ -54,17 +61,28 @@ const App = () => {
   const states = {
     good: [good, () => setGood(good + 1)],
     neutral: [neutral, () => setNeutral(neutral + 1)],
-    bad: [bad, () => setBad(bad - 1)]
+    bad: [bad, () => setBad(bad - 1)],
   };
 
-  return (
-    <div>
-      <h2>Give feedback</h2>
-      <Buttons states={states} />
-      <h2>StatisticLine</h2>
-      <Statistics states={states} />
-    </div>
-  );
+  if (good !== 0 || neutral || 0 && bad || 0) {
+    return (
+      <div>
+        <h2>Give feedback</h2>
+        <Buttons states={states} />
+        <h2>StatisticLine</h2>
+        <Statistics states={states} />
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <h2>Give feedback</h2>
+        <Buttons states={states} />
+        <h2>StatisticLine</h2>
+        <p>No feedback given</p>
+      </div>
+    );
+  }
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
