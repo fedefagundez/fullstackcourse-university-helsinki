@@ -5,11 +5,43 @@ const Button = ({ text, handleClick }) => (
   <button onClick={handleClick}>{text}</button>
 );
 
-const StatisticLine = ({ text, value, isPercentage = false}) => {
+const StatisticLine = ({ text, value, isPercentage = false }) => {
   return (
     <>
-      {text}: {isPercentage ? value + '%' : value} <br/>
+      {text}: {isPercentage ? value + "%" : value} <br />
     </>
+  );
+};
+
+const Buttons = (props) => {
+  const { states } = props;
+
+  return (
+    <div>
+      <Button text="Good" handleClick={states.good[1]} />
+      <Button text="Neutral" handleClick={states.neutral[1]} />
+      <Button text="Bad" handleClick={states.bad[1]} />
+    </div>
+  );
+};
+
+const Statistics = (props) => {
+  const { good, neutral, bad } = props.states;
+  const all = good[0] - 1 * bad[0] - neutral[0];
+
+  return (
+    <div>
+      <StatisticLine text="Good" value={good[0]} />
+      <StatisticLine text="Neutral" value={neutral[0]} />
+      <StatisticLine text="Bad" value={-1 * bad[0]} />
+      <StatisticLine text="All" value={all} />
+      <StatisticLine text="Average" value={(good[0] + bad[0]) / all} />
+      <StatisticLine
+        text="Positive"
+        value={(good[0] / all) * 100}
+        isPercentage={true}
+      />
+    </div>
   );
 };
 
@@ -19,35 +51,18 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  const goodPlusOne = () => setGood(good + 1);
-  const neutralPlusOne = () => setNeutral(neutral + 1);
-  const badPlusOne = () => setBad(bad - 1);
-
-  const statistics = {
-    good: [good, goodPlusOne],
-    neutral: [neutral, neutralPlusOne],
-    bad: [bad, badPlusOne]
-  }
-
-  let all = good -1 * bad + neutral;
+  const states = {
+    good: [good, () => setGood(good + 1)],
+    neutral: [neutral, () => setNeutral(neutral + 1)],
+    bad: [bad, () => setBad(bad - 1)]
+  };
 
   return (
     <div>
       <h2>Give feedback</h2>
-
-      <Button text="Good" handleClick={goodPlusOne} />
-      <Button text="Neutral" handleClick={neutralPlusOne} />
-      <Button text="Bad" handleClick={badPlusOne} />
-
+      <Buttons states={states} />
       <h2>StatisticLine</h2>
-
-      <StatisticLine text="Good" value={good} />
-      <StatisticLine text="Neutral" value={neutral} />
-      <StatisticLine text="Bad" value={-1*bad} />
-      <StatisticLine text="All" value={all} />
-      <StatisticLine text="Average" value={(good + bad)/all} />
-      <StatisticLine text="Positive" value={(Number(good)/all)*100} isPercentage={true}/>
-
+      <Statistics states={states} />
     </div>
   );
 };
