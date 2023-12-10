@@ -21,6 +21,7 @@ const App = () => {
         }
       ]);
     }
+    setNewName("");
   };
 
   return (
@@ -28,18 +29,19 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addName}>
         <div>
-          name: <input onChange={handleNameChange} />
+          name: <input value={newName} onChange={handleNameChange} />
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <ul>
-        {persons.map((person) => (
-          <li key={person.id}>{person.name}</li>
-        ))}
-      </ul>
+      {persons.map((person) => (
+        <React.Fragment key={person.id}>
+          {person.name}
+          <br />
+        </React.Fragment>
+      ))}
     </div>
   );
 };
