@@ -10,11 +10,17 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
+  const [showAll, setShowAll] = useState(true);
 
   const handleNameChange = (event) => setNewName(event.target.value);
   const handleNumberChange = (event) => setNewNumber(event.target.value);
   const handleFilterChange = (event) => {
     setNewFilter(event.target.value);
+    if (newFilter === "") {
+      setShowAll(true);
+    } else {
+      setShowAll(false);
+    }
   };
 
   const addName = (event) => {
@@ -35,14 +41,23 @@ const App = () => {
     setNewNumber("");
   };
 
+  const personsToShow = showAll
+    ? persons
+    : persons.filter((person) => {
+        const regexFilter = new RegExp(newFilter.toLowerCase());
+        const nameLowerCase = person.name.toLowerCase();
+        return regexFilter.test(nameLowerCase);
+      });
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with{" "}
+        <input value={newFilter} onChange={handleFilterChange} />
+      </div>
+      <h2>Add a new</h2>
       <form onSubmit={addName}>
-        <div>
-          filter shown with{" "}
-          <input value={newFilter} onChange={handleFilterChange} />
-        </div>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
         </div>
@@ -54,7 +69,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map((person) => (
+      {personsToShow.map((person) => (
         <React.Fragment key={person.id}>
           {person.name} {person.number}
           <br />
