@@ -85,6 +85,19 @@ const App = () => {
     )
   };
 
+  const Persons = () => {
+    return(
+      <div>
+        {personsToShow.map((person) => (
+        <React.Fragment key={person.id}>
+          {person.name} {person.number}
+          <br />
+        </React.Fragment>
+      ))}
+      </div>
+    );
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -98,12 +111,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      {personsToShow.map((person) => (
-        <React.Fragment key={person.id}>
-          {person.name} {person.number}
-          <br />
-        </React.Fragment>
-      ))}
+      <Persons/>
     </div>
   );
 };
