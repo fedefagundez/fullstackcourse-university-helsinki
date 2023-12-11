@@ -5,7 +5,7 @@ const App = () => {
     { id: 1, name: "Arto Hellas", number: "040-123456" },
     { id: 2, name: "Ada Lovelace", number: "39-44-5323523" },
     { id: 3, name: "Dan Abramov", number: "12-43-234345" },
-    { id: 4, name: "Mary Poppendieck", number: "39-23-6423122" }
+    { id: 4, name: "Mary Poppendieck", number: "39-23-6423122" },
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
@@ -33,8 +33,8 @@ const App = () => {
         {
           id: persons.length + 1,
           name: newName,
-          number: newNumber
-        }
+          number: newNumber,
+        },
       ]);
     }
     setNewName("");
@@ -54,7 +54,6 @@ const App = () => {
       <div>
         filter shown with
         <input
-          autoFocus="autoFocus" //keep the focus on the input
           value={newFilter}
           onChange={handleFilterChange}
         />
@@ -62,22 +61,42 @@ const App = () => {
     );
   };
 
+  const PersonForm = ({
+    addName,
+    handleName,
+    handleNumber,
+    newName,
+    newNumber,
+  }) => {
+    return(
+      <div>
+      <form onSubmit={addName}>
+      <div>
+        name: <input value={newName} onChange={handleName} />
+      </div>
+      <div>
+        number: <input value={newNumber} onChange={handleNumber} />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+    </div>
+    )
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter newFilter={newFilter} />
       <h2>Add a new</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        addName={addName}
+        handleName={handleNameChange}
+        handleNumber={handleNumberChange}
+        newName={newName}
+        newNumber={newNumber}
+      />
       <h2>Numbers</h2>
       {personsToShow.map((person) => (
         <React.Fragment key={person.id}>
