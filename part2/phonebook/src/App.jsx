@@ -1,5 +1,54 @@
 import React, { useState } from "react";
 
+const Filter = ({ newFilter, handleFilter }) => {
+  return (
+    <div>
+      filter shown with
+      <input
+        value={newFilter}
+        onChange={handleFilter}
+      />
+    </div>
+  );
+};
+
+const PersonForm = ({
+  addName,
+  handleName,
+  handleNumber,
+  newName,
+  newNumber,
+}) => {
+  return(
+    <div>
+    <form onSubmit={addName}>
+    <div>
+      name: <input value={newName} onChange={handleName} />
+    </div>
+    <div>
+      number: <input value={newNumber} onChange={handleNumber} />
+    </div>
+    <div>
+      <button type="submit">add</button>
+    </div>
+  </form>
+  </div>
+  )
+};
+
+const Persons = ({personsToShow}) => {
+  return(
+    <div>
+      {personsToShow.map((person) => (
+      <React.Fragment key={person.id}>
+        {person.name} {person.number}
+        <br />
+      </React.Fragment>
+    ))}
+    </div>
+  );
+};
+
 const App = () => {
   const [persons, setPersons] = useState([
     { id: 1, name: "Arto Hellas", number: "040-123456" },
@@ -49,59 +98,10 @@ const App = () => {
         return regexFilter.test(nameLowerCase);
       });
 
-  const Filter = ({ newFilter }) => {
-    return (
-      <div>
-        filter shown with
-        <input
-          value={newFilter}
-          onChange={handleFilterChange}
-        />
-      </div>
-    );
-  };
-
-  const PersonForm = ({
-    addName,
-    handleName,
-    handleNumber,
-    newName,
-    newNumber,
-  }) => {
-    return(
-      <div>
-      <form onSubmit={addName}>
-      <div>
-        name: <input value={newName} onChange={handleName} />
-      </div>
-      <div>
-        number: <input value={newNumber} onChange={handleNumber} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-    </div>
-    )
-  };
-
-  const Persons = () => {
-    return(
-      <div>
-        {personsToShow.map((person) => (
-        <React.Fragment key={person.id}>
-          {person.name} {person.number}
-          <br />
-        </React.Fragment>
-      ))}
-      </div>
-    );
-  };
-
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter newFilter={newFilter} />
+      <Filter newFilter={newFilter} handleFilter={handleFilterChange}/>
       <h2>Add a new</h2>
       <PersonForm
         addName={addName}
@@ -111,7 +111,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons/>
+      <Persons personsToShow={personsToShow}/>
     </div>
   );
 };
