@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { nanoid } from "nanoid";
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, newCountryFilter }) => {
   const mapedCountries = countries.map((country) => {
+    if (!country.hasOwnProperty("capital")) {
+      country.capital = "Not found";
+    }
     return {
       id: nanoid(),
       name: country.name.common,
@@ -30,6 +33,8 @@ const Countries = ({ countries }) => {
         <Country country={countries[0]} />
       </div>
     );
+  } else if (newCountryFilter === "") {
+    return <></>;
   }
 };
 
@@ -69,7 +74,10 @@ function App() {
 
   const handleCountryFilter = (event) => {
     setCountryFilter(event.target.value);
-    const regex = new RegExp("^" + event.target.value.toLowerCase());
+    console.log(event.target.value);
+    const regex = new RegExp(
+      "^" + (event.target.value !== "" ? event.target.value.toLowerCase() : " ")
+    );
     const filteredCountries = countries.filter((country) =>
       regex.test(country.name.common.toLowerCase())
     );
@@ -87,7 +95,10 @@ function App() {
         onChange={handleCountryFilter}
       />{" "}
       <br />
-      <Countries countries={showCountries} />
+      <Countries
+        countries={showCountries}
+        newCountryFilter={newCountryFilter}
+      />
     </div>
   );
 }
