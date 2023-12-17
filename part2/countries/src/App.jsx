@@ -2,20 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { nanoid } from "nanoid";
 
-const Countries = ({ countries, newCountryFilter }) => {
+const Countries = ({ countries, newCountryFilter, setShowCountry }) => {
   const mapedCountries = countries.map((country) => {
     if (!country.hasOwnProperty("capital")) {
       country.capital = "Not found";
     }
-    return {
-      id: nanoid(),
-      name: country.name.common,
-      capital: country.capital[0],
-      population: country.population,
-      languages: country.languages,
-      flag: country.flags.png
-    };
+    return country;
   });
+
+  const handler = (event) => {
+    const name = event.target.dataset.name;
+    setShowCountry(name);
+  };
 
   if (countries.length >= 10) {
     return <div>Too many matches, specify another filter</div>;
@@ -23,18 +21,21 @@ const Countries = ({ countries, newCountryFilter }) => {
     return (
       <div>
         {mapedCountries.map((country) => (
-          <div key={country.id}>{country.name}</div>
+          <div key={nanoid()}>
+            {country.name.common}
+            <button data-name={country.name.common} onClick={handler}>
+              show
+            </button>
+          </div>
         ))}
       </div>
     );
   } else if (countries.length === 1) {
     return (
       <div>
-        <Country country={countries[0]} />
+        <Country country={mapedCountries[0]} />
       </div>
     );
-  } else if (newCountryFilter === "") {
-    return <></>;
   }
 };
 
@@ -62,6 +63,7 @@ function App() {
   const [countries, setCountries] = useState([]);
   const [newCountryFilter, setCountryFilter] = useState("");
   const [showCountries, setShowCountries] = useState([]);
+  const [showCountry, setShowCountry] = useState("");
 
   const hook = () => {
     axios
@@ -98,6 +100,7 @@ function App() {
       <Countries
         countries={showCountries}
         newCountryFilter={newCountryFilter}
+        setShowCountry={setShowCountry}
       />
     </div>
   );
