@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import WeatherInfo from "./WeatherInfo";
 
 const CountryInfo = ({ country }) => {
   const langs = Object.values(country.languages);
@@ -15,6 +16,7 @@ const CountryInfo = ({ country }) => {
         ))}
       </ul>
       <img src={country.flags.png} alt={`flag of ${country.name.common}`} />
+      <WeatherInfo name={country.name.common} />
     </div>
   );
 };

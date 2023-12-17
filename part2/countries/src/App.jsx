@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Form from "./components/Form.jsx";
 import CountriesRender from "./components/CountriesRender.jsx";
 import axios from "axios";
-import { nanoid } from "nanoid";
 
 function App() {
   const [countries, setCountries] = useState([]);
