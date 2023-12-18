@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const WeatherInfo = ({ countryName }) => {
+const WeatherInfo = ({ capital }) => {
   const [weatherData, setWeatherData] = useState({});
-  const api_key = import.meta.env.VITE_API_KEY;
+  const apiKey = import.meta.env.VITE_API_KEY;
   console.log(api_key);
 
-  const url = `http://api.weatherstack.com/current?access_key=${api_key}&query=${countryName}`;
+  const url = `http://api.weatherstack.com/current?access_key=${apiKey}&query=${capital}`;
 
   const hook = () => {
     axios
@@ -20,7 +20,19 @@ const WeatherInfo = ({ countryName }) => {
 
   useEffect(hook);
 
-  return null;
+  return (
+    <div>
+      <h3>Weather in {capital}</h3>
+      <b>Temperature:</b> {weatherData.current.temperature}ºC <br />
+      <img
+        src={weatherData.current.weather_icons[0]}
+        alt={weatherData.current.weather_descriptions[0]}
+      />{" "}
+      <br />
+      <b>Wind:</b> {weatherData.current.wind_speed} mph direction{" "}
+      {weatherData.current.wind_dir}
+    </div>
+  );
 };
 
 export default WeatherInfo;
