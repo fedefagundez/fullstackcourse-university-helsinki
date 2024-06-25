@@ -1,54 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-
-const Filter = ({ newFilter, handleFilter }) => {
-  return (
-    <div>
-      filter shown with
-      <input
-        value={newFilter}
-        onChange={handleFilter}
-      />
-    </div>
-  );
-};
-
-const PersonForm = ({
-  addName,
-  handleName,
-  handleNumber,
-  newName,
-  newNumber,
-}) => {
-  return(
-    <div>
-    <form onSubmit={addName}>
-    <div>
-      name: <input value={newName} onChange={handleName} />
-    </div>
-    <div>
-      number: <input value={newNumber} onChange={handleNumber} />
-    </div>
-    <div>
-      <button type="submit">add</button>
-    </div>
-  </form>
-  </div>
-  )
-};
-
-const Persons = ({personsToShow}) => {
-  return(
-    <div>
-      {personsToShow.map((person) => (
-      <React.Fragment key={person.id}>
-        {person.name} {person.number}
-        <br />
-      </React.Fragment>
-    ))}
-    </div>
-  );
-};
+import Filter from "./components/Filter.jsx";
+import PersonForm from "./components/PersonForm.jsx";
+import Persons from "./components/Persons.jsx";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
